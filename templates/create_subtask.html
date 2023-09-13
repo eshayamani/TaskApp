@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Sign in</title>
+        <meta name="description" content="Login Page for Task App" />
+        <link rel="shortcut icon" href="https://picocss.com/favicon.ico" />
+        <link rel="canonical" href="https://picocss.com/examples/sign-in/" />
+
+        <!-- Pico.css -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+
+        <!-- Custom styles for this example -->
+        <!-- <link rel="stylesheet" href="custom.css" /> -->
+    </head>
+
+    <body>
+    <!-- Nav -->
+        <nav class="container-fluid">
+            <ul>
+                <li>
+                    <a href="./" class="contrast" onclick="event.preventDefault()"><strong>TaskApp</strong></a>
+                </li>
+            </ul>
+        </nav>
+    <!-- ./ Nav -->
+
+    <!-- Main -->
+    <main class="container">
+        <h1>Create New Subtask</h1>
+        <article class="grid">
+            {% if error %}
+                <p class='error'>{{ error }}</p>
+            {% endif %}
+            <div>
+                <form method="post">
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Title"
+                        aria-label="title"
+                        autocomplete="title"
+                        required
+                    />
+                    <input
+                        type="datetime-local"
+                        name="duedate"
+                        placeholder="Due Date"
+                        aria-label="duedate"
+                        autocomplete="duedate"
+                        required
+                    />
+                    <button type="submit" class="contrast">Create Task</button>
+                </form>      
+            </div>
+        <div></div>
+        </article>
+    </main>
+    <!-- ./ Main -->
+
+    <!-- Footer -->
+    <footer class="container-fluid">
+        <!-- <small
+        >Built with <a href="https://picocss.com" class="secondary">Pico</a> •
+        <a href="https://github.com/picocss/examples/tree/master/v1-sign-in/" class="secondary"
+            >Source code</a
+        ></small
+        > -->
+    </footer>
+    <!-- ./ Footer -->
+
+    <!-- Minimal theme switcher -->
+    </body>
+    </html>

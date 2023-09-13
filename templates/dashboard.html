@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Dashboard</title>
+        <meta name="description" content="See your groups and tasks" />
+        <link rel="shortcut icon" href="https://picocss.com/favicon.ico" />
+        <link rel="canonical" href="https://picocss.com/examples/sign-in/" />
+
+        <!-- Pico.css -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+
+        <!-- Custom styles for this example -->
+        <!-- <link rel="stylesheet" href="custom.css" /> -->
+    </head>
+
+    <body>
+    <!-- Nav -->
+        <nav class="container-fluid">
+            <ul>
+                <li>
+                    <a href="./" class="contrast" onclick="event.preventDefault()"><strong>TaskApp</strong></a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="/logout" class="contrast"><strong>Logout</strong></a>
+                </li>
+            </ul>
+        </nav>
+    <!-- ./ Nav -->
+
+    <!-- Main -->
+    <main class="container">
+        <vgroup>
+            <h1>Welcome, {{session['name']}}</h1>
+            <h3>Total tasks: {{userInfo['totalTasks']}}</h3>
+            <form method="post">
+                <button type="submit" class="secondary outline">Export CSV</button>
+            </form>
+        </vgroup>
+
+        <!-- code for dynamically creating the group task tables -->
+        {% for groupName, tasks in userInfo['groups'].items() %}
+            <article class="grid">
+                <vgroup>
+                    <h2>{{ groupName }}</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Title</th>
+                                <th>Due Date</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                                <tr>
+                                    {% if task[3] == 0 %}
+                                        <td><input type="checkbox" class="task-checkbox" data-task-id="{{ task[0] }}"></td>
+                                    {% else %}
+                                        <td><input type="checkbox" class="task-checkbox" data-task-id="{{ task[0] }}" checked></td>
+                                    {% endif %}
+                                    <!-- <td><a href="{{url_for('subtasks')}}">{{ task[1] }}</a></td> -->
+                                    <td>
+                                        <form action="{{ url_for('subtasks') }}" method="post">
+                                            <input type="hidden" name="task_id" value="{{ task[0] }}">
+                                            <input type="hidden" name="task_name" value="{{ task[1] }}">
+                                            <button type="submit" class="primary outline">{{ task[1] }}</button>
+                                        </form>
+                                    </td>
+                                    <td><time datetime="{{ task[2] }}">{{ task[2] }}</time></td> 
+                                    <td>{{ task[4] }}</td>
+                                    <td>{{ task[5] }}</td>
+                                    <td>
+                                        <form action="{{ url_for('delete_task') }}" method="post">
+                                            <input type="hidden" name="task_id" value="{{ task[0] }}">
+                                            <button type="submit" class="secondary outline">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </vgroup>
+            </article>
+        {% endfor %}
+    
+        <a href="{{ url_for('create_task') }}" class="btn btn-primary">Create New Task</a>
+
+    </main>
+    <!-- ./ Main -->
+
+    <!-- Footer -->
+    <footer class="container-fluid">
+    </footer>
+    <!-- ./ Footer -->
+
+    <!-- Minimal theme switcher -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Attach event listener to checkbox change event
+        $('.task-checkbox').change(function() {
+            // Get the task ID associated with the checkbox
+            var taskId = $(this).data('task-id');
+        
+            // Send an AJAX request to your Flask route
+            $.ajax({
+                url: '/update_task_status',
+                method: 'POST',
+                data: { taskId: taskId, completed: this.checked },
+                success: function(response) {
+                    // Handle the response from the server if needed
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                // Handle any error that occurred during the AJAX request
+                console.error(error);
+                }
+            });
+        });
+    </script>  
+    </body>
+    </html>

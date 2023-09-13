@@ -1,0 +1,13 @@
+sub {
+    /* Reset all default button styles */
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    display: inline-block;
+    font: inherit;
+    line-height: normal;
+    outline: none;
+    padding: 0;
+    text-align: center;
+}
